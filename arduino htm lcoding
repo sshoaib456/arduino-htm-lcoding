@@ -3,8 +3,14 @@
 WiFiClient client;
 WiFiServer server(80);
 
-#define led1 D5
-#define led2 D6
+#define cpled1 D0 
+#define cpled2 D1
+#define cpfan1 D2
+#define cpfan2 D3
+#define Gdled1 D4
+#define Gdled2 D5
+#define Gdfan1 D6
+#define Gdfan2 D7
 
 void setup()
 {
@@ -20,8 +26,14 @@ void setup()
   Serial.println("NodeMCU is connected!");
   Serial.println(WiFi.localIP());
   server.begin();
-  pinMode(led1, OUTPUT);
-  pinMode(led2, OUTPUT);
+  pinMode(cpled1, OUTPUT);
+  pinMode(cpled2, OUTPUT);
+  pinMode(cpfan1, OUTPUT);
+  pinMode(cpfan2, OUTPUT);
+  pinMode(Gdled1, OUTPUT);
+  pinMode(Gdled2, OUTPUT);
+  pinMode(Gdfan1, OUTPUT);
+  pinMode(Gdfan2, OUTPUT);
 }
 
 void loop()
@@ -33,26 +45,89 @@ void loop()
     String request =  client.readStringUntil('\n');
     Serial.println(request);
     request.trim();
-    if (request == "GET /led1on HTTP/1.1")
+    if (request == "GET /Car_porch_led1on HTTP/1.1")
     {
-      digitalWrite(led1, HIGH);
-      Serial.println("LED 1 is ON");
+      digitalWrite(cpled1, HIGH);
+      Serial.println("cp LED 1 is ON");
     }
-    if (request == "GET /led1off HTTP/1.1")
+    if (request == "GET /Car_porch_led1off HTTP/1.1")
     {
-      digitalWrite(led1, LOW);
-      Serial.println("LED 1 is OFF");
+      digitalWrite(cpled1, LOW);
+      Serial.println("cp LED 1 is OFF");
     }
-    if (request == "GET /led2on HTTP/1.1")
+    if (request == "GET /Car_porch_led2on HTTP/1.1")
     {
-      digitalWrite(led2, HIGH);
-      Serial.println("LED 2 is ON");
+      digitalWrite(cpled2, HIGH);
+      Serial.println("cp LED 2 is ON");
     }
-    if (request == "GET /led2off HTTP/1.1")
+    if (request == "GET /Car_porch_led2off HTTP/1.1")
     {
-      digitalWrite(led2, LOW);
-      Serial.println("LED 2 is OFF");
+      digitalWrite(cpled2, LOW);
+      Serial.println("cp LED 2 is OFF");
     }
+     if (request == "GET /Car_porch_fan1on HTTP/1.1")
+    {
+      digitalWrite(cpfan1, HIGH);
+      Serial.println("cp fan 1 is ON");
+    }
+     if (request == "GET /Car_porch_fan2off HTTP/1.1")
+    {
+      digitalWrite(cpfan1, LOW);
+      Serial.println("cp fan 1 is OFF");
+    }
+    if (request == "GET /Car_porch_fan2on HTTP/1.1")
+    {
+      digitalWrite(cpfan2, HIGH);
+      Serial.println("cp fan 2 is ON");
+    }
+     if (request == "GET /Car_porch_fan2off HTTP/1.1")
+    {
+      digitalWrite(cpfan2, LOW);
+      Serial.println("cp fan 2 is OFF");
+    }
+    if (request == "GET /Garden_led1on HTTP/1.1")
+    {
+      digitalWrite(Gdled1, HIGH);
+      Serial.println("Gd LED 1 is ON");
+    }
+    if (request == "GET /Garden_led1off HTTP/1.1")
+    {
+      digitalWrite(Gdled1, LOW);
+      Serial.println("Gd LED 1 is OFF");
+    }
+    if (request == "GET /Garden_led2on HTTP/1.1")
+    {
+      digitalWrite(Gdled2, HIGH);
+      Serial.println("Gd LED 2 is ON");
+    }
+    if (request == "GET /Garden_led2off HTTP/1.1")
+    {
+      digitalWrite(Gdled2, LOW);
+      Serial.println("Gd LED 2 is OFF");
+    }
+     if (request == "GET /Garden_fan1on HTTP/1.1")
+    {
+      digitalWrite(Gdfan1, HIGH);
+      Serial.println("Gd fan 1 is ON");
+    }
+     if (request == "GET /Garden_fan2off HTTP/1.1")
+    {
+      digitalWrite(Gdfan1, LOW);
+      Serial.println("Gd fan 1 is OFF");
+    }
+    if (request == "GET /Garden_fan2on HTTP/1.1")
+    {
+      digitalWrite(Gdfan2, HIGH);
+      Serial.println("Gd fan 2 is ON");
+    }
+     if (request == "GET /Garden_fan2off HTTP/1.1")
+    {
+      digitalWrite(Gdfan2, LOW);
+      Serial.println("Gd fan 2 is OFF");
+    }
+
+
+    
   }
   client.println("HTTP/1.1 200 OK");
   client.println("Content-type:text/html");
@@ -61,8 +136,8 @@ void loop()
   client.println("<!DOCTYPE HTML>");
   client.println("<html>");
   client.println("<head>");
-  client.println("<title>Home automation</title>")
-  client.println("<style>")
+  client.println("<title>Home Automation System</title>");
+  client.println("<style>");
   client.println("body{text-align: center;}");
   client.println("</style>");
   client.println("</head>");
@@ -70,53 +145,30 @@ void loop()
   client.println(" <h1>Home Automation System</h1>");
   client.println("<h2>Made By : Syed Shoaib UR Rehman</h2>");
   client.println("<h2>Room 1</h2>");
-  client.println("<a href=\"/room1led1on\"\"><button>LED 1 ON</button></a>");
-  client.println("<a href=\"/room1led1off\"\"><button>LED 1 OFF</button></a>");
-  client.println("<br><br>");
-  client.println(" <a href=\"/room1led2on\"\"><button>LED 2 ON</button></a>");
-  client.println("<a href=\"/room1led2off\"\"><button>LED 2 OFF</button></a>");
-  client.println("<br><br>"); 
-  client.println("<h2>Room 2</h2>");
-  client.println("<a href=\"/room2led1on\"\"><button>LED 1 ON</button></a>");
-  client.println("<a href=\"/room2led1off\"\"><button>LED 1 OFF</button></a>");
-  client.println("<br><br>");
-  client.println("<a href=\"/room2led2on\"\"><button>LED 2 ON</button></a>");
-  client.println("<a href=\"/room2led2off\"\"><button>LED 2 OFF</button></a>");
-  client.println(" <br><br>");
-  client.println("<a href=\"/room2led2on\"\"><button>LED 2 ON</button></a>");
-  client.println("<a href=\"/room2led2off\"\"><button>LED 2 OFF</button></a>");
-  client.println("<br><br>");
-  client.println(" <a href=\"/room2fan1on\"\"><button>FAN 1 ON</button></a>");
-  client.println("<a href=\"/room2fan1off\"\"><button>FAN 1 OFF</button></a>");
-  client.println("<br><br>");
-  client.println("<a href=\"/room2fan2on\"\><button>FAN 2 ON</button></a>");
-  client.println("<a href=\"/room2fan2off\"\><button>FAN 2 OFF</button></a>");
-  client.println("<br><br>");
   client.println("<h2>Car Garage</h2>");
-  client.println("<a href=\"/Cargarageled1on\"\><button>LED 1 ON</button></a>");
+  client.println("<a href=\"/Cargarageled1on\"\"><button>LED 1 ON</button></a>");
   client.println("<a href=\"/Cargarageled1off\"><button>LED 1 OFF</button></a>");
   client.println("<br><br>");
-  client.println("<a href=\"/Cargarageled2on\"\><button>LED 2 ON</button></a>");
- client.println("<a href=\"/Cargarageled2off\"\><button>LED 2 OFF</button></a>");
+  client.println("<a href=\"/Cargarageled2on\"\"><button>LED 2 ON</button></a>");
+ client.println("<a href=\"/Cargarageled2off\"\"><button>LED 2 OFF</button></a>");
  client.println("<br><br>");
- client.println("<a href=\"/Cargaragefan1on\"\><button>FAN 1 ON</button></a>");
- client.println("<a href=\"/Cargaragefan1off\"\><button>FAN 2 OFF</button></a>");
+ client.println("<a href=\"/Cargaragefan1on\"\"><button>FAN 1 ON</button></a>");
+ client.println("<a href=\"/Cargaragefan1off\"\"><button>FAN 2 OFF</button></a>");
  client.println("<br><br>");
- client.println("<a href=\"/Cargaragefan2on\"\><button>FAN 2 ON</button></a>"); 
- client.println("<a href=\"/Cargaragefan2off\"\><button>FAN 2 OFF</button></a>");
+ client.println("<a href=\"/Cargaragefan2on\"\"><button>FAN 2 ON</button></a>"); 
+ client.println("<a href=\"/Cargaragefan2off\"\"><button>FAN 2 OFF</button></a>");
  client.println("<br><br>");
  client.println("<h2>GARDEN</h2");
- client.println("<a href=\"/gardenled1on\"\><button>LED 1 ON</button></a>");
- client.println("<a href=\"/gardenled1off\"><button>LED 1 OFF</button></a>");
- client.println("");
- client.println("<a href=\"/gardenled2on\"\><button>LED 2 ON</button></a>");
- client.println("<a href=\"/gardenled2off\"\><button>LED 2 OFF</button></a>");
+ client.println("<a href=\"/gardenled1on\"\"><button>LED 1 ON</button></a>");
+ client.println("<a href=\"/gardenled1off\"\"><button>LED 1 OFF</button></a>");
  client.println("<br><br>");
+ client.println("<a href=\"/gardenled2on\"\"><button>LED 2 ON</button></a>");
+ client.println("<a href=\"/gardenled2off\"\"><button>LED 2 OFF</button></a>");
  client.println("<br><br>");
- client.println(" <a href=\"/gardenfan1on\"\><button>FAN 1 ON</button></a>");
- client.println(" <a href=\"/gardenfan1off\"\><button>FAN 1 OFF</button></a>");
+ client.println(" <a href=\"/gardenfan1on\"\"><button>FAN 1 ON</button></a>");
+ client.println(" <a href=\"/gardenfan1off\"\"><button>FAN 1 OFF</button></a>");
  client.println("<br><br>");
- client.println("<a href=\"/gardenfan2on\"\><button>FAN 2 ON</button></a>");
- client.println("<a href=\"/gardenfan2off\"\><button>FAN 2 OFF</button></a>");
+ client.println("<a href=\"/gardenfan2on\"\"><button>FAN 2 ON</button></a>");
+ client.println("<a href=\"/gardenfan2off\"\"><button>FAN 2 OFF</button></a>");
  client.println("<br><br>");
 }
